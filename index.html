@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chương IV: Biến Dạng Vật Rắn & Áp Suất Chất Lỏng</title>
+    
+    <!-- Fonts and External Libs -->
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* CSS Animations cho Chuyển Cảnh Tùy Chỉnh (Tối ưu mượt mà) */
+        @keyframes slide-in-right { 0% { transform: translateX(50px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+        @keyframes slide-in-left { 0% { transform: translateX(-50px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+        @keyframes slide-in-top { 0% { transform: translateY(-50px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+        @keyframes slide-in-bottom { 0% { transform: translateY(50px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+        @keyframes zoom-in-scale { 0% { transform: scale(0.95); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes flip-in-y { 0% { transform: perspective(1000px) rotateY(30deg); opacity: 0; } 100% { transform: perspective(1000px) rotateY(0deg); opacity: 1; } }
+        
+        .anim-slide-right { animation: slide-in-right 0.5s ease-out forwards; will-change: transform, opacity; }
+        .anim-slide-left { animation: slide-in-left 0.5s ease-out forwards; will-change: transform, opacity; }
+        .anim-slide-top { animation: slide-in-top 0.5s ease-out forwards; will-change: transform, opacity; }
+        .anim-slide-bottom { animation: slide-in-bottom 0.5s ease-out forwards; will-change: transform, opacity; }
+        .anim-zoom-in { animation: zoom-in-scale 0.5s ease-out forwards; will-change: transform, opacity; }
+        .anim-flip-y { animation: flip-in-y 0.6s ease-out forwards; will-change: transform, opacity; }
+
+        /* Tối ưu hiệu năng: Tắt backdrop-filter vì gây giật lag trên nhiều máy */
+        #page-transition { background: rgba(0,0,0,0.6) !important; }
+        .pt-layer { opacity: 0; /* Ẩn bớt các layer thừa để nhẹ hơn */ }
+    </style>
+</head>
+<body>
+    <!-- Animated Cyberpunk Background -->
+    <div class="cyber-bg">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+        <div class="noise-overlay"></div>
+    </div>
+
+    <!-- Header -->
+    <!-- Loading -->
+    <div id="loading">
+        <h2 class="gradient-text">Đang khởi tạo hệ thống 3D...</h2>
+        <div class="loader-bar"><div class="loader-progress" id="loader-progress"></div></div>
+    </div>
+
+    <!-- Page Transition Overlay -->
+    <div id="page-transition">
+        <div class="pt-icon">⚛️</div>
+        <div class="pt-text"></div>
+        <div class="pt-particles" id="pt-particles"></div>
+        <div class="pt-ring"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div id="hero-canvas"></div>
+        <div class="container hero-content">
+            <h1 class="gradient-text">CHƯƠNG IV<br>Biến Dạng Vật Rắn & Áp Suất Chất Lỏng</h1>
+            <p>Bài 33 · Bài 34 · Khám phá khoa học qua mô phỏng 3D</p>
+            <div class="hero-buttons">
+                <a onclick="switchTab('theory','🔬','BẮT ĐẦU HỌC')" class="btn btn-primary" style="cursor:pointer;">🔬 Bắt Đầu Học</a>
+                <a onclick="switchTab('games','🎮','VÀO TRÒ CHƠI')" class="btn btn-outline" style="cursor:pointer;">🎮 Vào Trò Chơi</a>
+            </div>
+        </div>
+        <div class="scroll-down">↓</div>
+    </section>
+
+    <!-- Navbar -->
+    <nav>
+        <div class="container nav-content">
+            <a href="#" class="nav-logo gradient-text">PHYSICS 3D</a>
+            <div class="nav-links">
+                <a onclick="switchTab('theory','📖','LÝ THUYẾT')">Lý Thuyết</a>
+                <a onclick="switchTab('simulations','🧊','MÔ PHỎNG 3D')">Mô Phỏng</a>
+                <a onclick="switchTab('video-lesson','🎬','VIDEO BÀI GIẢNG')">Video</a>
+                <a onclick="switchTab('exercises','📝','BÀI TẬP')">Bài Tập</a>
+                <a onclick="switchTab('quiz','🧠','TRẮC NGHIỆM')">Trắc Nghiệm</a>
+                <a onclick="switchTab('games','🎮','TRÒ CHƠI')">Trò Chơi</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dynamic Content Container -->
+    <div id="dynamic-content"></div>
+
+    <!-- Custom JS Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/components/theory.html.js"></script>
+    <script src="js/components/video.html.js"></script>
+    <script src="js/components/exercises.html.js"></script>
+    <script src="js/components/quiz.html.js"></script>
+    <script src="js/components/simulations.html.js"></script>
+    <script src="js/components/games.html.js"></script>
+    <script src="js/components/exam.html.js"></script>
+    <script src="js/simulations.js"></script>
+    <script src="js/games.js"></script>
+    <script src="js/exam.js"></script>
+    <script src="js/ai-knowledge.js"></script>
+    <script src="js/chatbot.js"></script>
+    <script src="js/video-player.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+    let currentTab = null;
+    let isTransitioning = false;
+
+    function switchTab(tabId, icon, text, skipHistory = false) {
+        if (currentTab === tabId || isTransitioning) return;
+        isTransitioning = true;
+        
+        const pt = document.getElementById('page-transition');
+        const ptIcon = pt.querySelector('.pt-icon');
+        const ptText = pt.querySelector('.pt-text');
+        const ptPart = document.getElementById('pt-particles');
+
+        ptIcon.textContent = icon || '⚛️';
+        ptText.textContent = text || 'TẢI DỮ LIỆU';
+        ptPart.innerHTML = '';
+
+        // Giảm bớt số lượng particle để tối ưu hiệu năng (chỉ 15 thay vì 40)
+        const colors = ['#00f6ff','#7B2FFF','#00ff94','#ffb800','#ff0055'];
+        for (let i = 0; i < 15; i++) {
+            const p = document.createElement('div');
+            p.className = 'pt-particle';
+            const size = Math.random() * 8 + 2;
+            p.style.cssText = `width:${size}px;height:${size}px;background:${colors[i%5]};
+                left:${50+(Math.random()-0.5)*20}%;top:${45+(Math.random()-0.5)*10}%;
+                --tx:${(Math.random()-0.5)*300}px;--ty:${(Math.random()-0.5)*300}px;
+                animation-delay:${0.1+Math.random()*0.3}s;
+                box-shadow:0 0 ${size*2}px ${colors[i%5]};`;
+            ptPart.appendChild(p);
+        }
+
+        // Activate transition overlay
+        pt.classList.remove('exit');
+        pt.classList.add('active');
+
+        if (!skipHistory) {
+            history.pushState({ tabId }, '', '#' + tabId);
+        }
+
+        const animMap = {
+            'theory': 'anim-slide-right',
+            'simulations': 'anim-zoom-in',
+            'video-lesson': 'anim-slide-bottom',
+            'exercises': 'anim-slide-left',
+            'quiz': 'anim-flip-y',
+            'games': 'anim-slide-top',
+            'exam': 'anim-slide-top'
+        };
+
+        // Switch sections quickly
+        setTimeout(() => {
+            document.getElementById('hero').style.display = 'none';
+            document.querySelectorAll('section:not(#hero)').forEach(s => {
+                s.className = 'page-section'; // reset classes
+                s.style.display = 'none'; // hide all
+            });
+            
+            const target = document.getElementById(tabId);
+            if (target) {
+                target.style.display = 'block';
+                // Bắt buộc reflow (force reflow) để browser ghi nhận DOM đã hiện ra trước khi gắn animation
+                void target.offsetWidth; 
+                
+                // Áp dụng animation tùy chỉnh
+                const animClass = animMap[tabId] || 'anim-zoom-in';
+                target.classList.add('tab-active', animClass);
+            }
+            currentTab = tabId;
+            window.scrollTo({ top: 0 });
+
+            // Init 3D sims on first open
+            if (tabId === 'simulations' && window.initSimsOnce) window.initSimsOnce();
+
+            // Update nav active state
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('nav-active'));
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(a => {
+                if (a.onclick && a.onclick.toString().includes(tabId)) a.classList.add('nav-active');
+            });
+        }, 300); // Rút ngắn thời gian chờ overlay
+
+        // Exit transition nhanh hơn
+        setTimeout(() => { pt.classList.add('exit'); }, 600);
+
+        // Cleanup
+        setTimeout(() => {
+            pt.classList.remove('active', 'exit');
+            ptPart.innerHTML = '';
+            isTransitioning = false;
+        }, 1200);
+    }
+
+    function goHome(skipHistory = false) {
+        if (currentTab === null || isTransitioning) return;
+        isTransitioning = true;
+        
+        const pt = document.getElementById('page-transition');
+        pt.querySelector('.pt-icon').textContent = '🏠';
+        pt.querySelector('.pt-text').textContent = 'TRANG CHỦ';
+        pt.classList.remove('exit');
+        pt.classList.add('active');
+
+        if (!skipHistory) {
+            history.pushState({ tabId: null }, '', window.location.pathname);
+        }
+
+        setTimeout(() => {
+            document.querySelectorAll('section:not(#hero)').forEach(s => s.className = 'page-section');
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('nav-active'));
+            document.getElementById('hero').style.display = 'flex';
+            currentTab = null;
+            window.scrollTo({ top: 0 });
+        }, 300);
+
+        setTimeout(() => { pt.classList.add('exit'); }, 600);
+        setTimeout(() => {
+            pt.classList.remove('active', 'exit');
+            isTransitioning = false;
+        }, 1200);
+    }
+
+    // Logo click = back to hero
+    document.addEventListener('DOMContentLoaded', () => {
+        const logo = document.querySelector('.nav-logo');
+        if (logo) logo.addEventListener('click', (e) => {
+            e.preventDefault();
+            goHome();
+        });
+
+        // Handle initial hash routing
+        if (window.location.hash) {
+            const hash = window.location.hash.substring(1);
+            if (document.getElementById(hash) && document.getElementById(hash).classList.contains('page-section')) {
+                let icon = '⚛️', text = 'TẢI DỮ LIỆU';
+                const link = Array.from(document.querySelectorAll('.nav-links a')).find(a => a.onclick && a.onclick.toString().includes(hash));
+                if (link) {
+                    const match = link.onclick.toString().match(/switchTab\([^,]+,\s*'([^']+)',\s*'([^']+)'/);
+                    if (match) { icon = match[1]; text = match[2]; }
+                }
+                switchTab(hash, icon, text, true);
+            }
+        }
+    });
+
+    window.addEventListener('popstate', (e) => {
+        if (e.state && e.state.tabId) {
+            let icon = '⚛️', text = 'TẢI DỮ LIỆU';
+            const link = Array.from(document.querySelectorAll('.nav-links a')).find(a => a.onclick && a.onclick.toString().includes(e.state.tabId));
+            if (link) {
+                const match = link.onclick.toString().match(/switchTab\([^,]+,\s*'([^']+)',\s*'([^']+)'/);
+                if (match) { icon = match[1]; text = match[2]; }
+            }
+            switchTab(e.state.tabId, icon, text, true);
+        } else {
+            goHome(true);
+        }
+    });
+    </script>
+    
+</body>
+</html>

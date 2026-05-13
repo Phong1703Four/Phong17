@@ -18,7 +18,7 @@ const HTML_VIDEO = `
                 <div class="video-main-column">
                     <div class="video-player-wrapper">
                         <video class="native-video" id="video-1" controls controlsList="nodownload">
-                            <source src="videos/Nang_luong_Cong_co_hoc.mp4" type="video/mp4">
+                            <source src="videos/nang-luong-Cong-co-hoc.mp4" type="video/mp4">
                             Trình duyệt của bạn không hỗ trợ thẻ video.
                         </video>
                     </div>
@@ -85,7 +85,7 @@ const HTML_VIDEO = `
                 <div class="video-main-column">
                     <div class="video-player-wrapper">
                         <video class="native-video" id="video-2" controls controlsList="nodownload">
-                            <source src="videos/Luc_va_Ap_Suat_Doi_Song.mp4" type="video/mp4">
+                            <source src="videos/luc-va-ap-suat.mp4" type="video/mp4">
                             Trình duyệt của bạn không hỗ trợ thẻ video.
                         </video>
                     </div>

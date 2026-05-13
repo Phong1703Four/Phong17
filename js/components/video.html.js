@@ -18,7 +18,7 @@ const HTML_VIDEO = `
                 <div class="video-main-column">
                     <div class="video-player-wrapper">
                         <video class="native-video" id="video-1" controls controlsList="nodownload">
-                            <source src="assets/videos/Nang_luong_Cong_co_hoc.mp4" type="video/mp4">
+                            <source src="videos/Nang_luong_Cong_co_hoc.mp4" type="video/mp4">
                             Trình duyệt của bạn không hỗ trợ thẻ video.
                         </video>
                     </div>
@@ -83,8 +83,11 @@ const HTML_VIDEO = `
             <div class="native-video-layout reveal" id="video-content-ap-suat" style="display: none;">
                 <!-- Cột Trái: Trình Phát Video + Phân Tích -->
                 <div class="video-main-column">
-                    <div class="video-player-wrapper" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1);">
-                        <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://www.youtube.com/embed/n4d-mP9z_tQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <div class="video-player-wrapper">
+                        <video class="native-video" id="video-2" controls controlsList="nodownload">
+                            <source src="videos/Luc_va_Ap_Suat_Doi_Song.mp4" type="video/mp4">
+                            Trình duyệt của bạn không hỗ trợ thẻ video.
+                        </video>
                     </div>
                     
                     <!-- Phân Tích Kiến Thức -->
@@ -121,20 +124,20 @@ const HTML_VIDEO = `
                 <!-- Cột Phải: Mục Lục (TOC) -->
                 <div class="video-toc-column">
                     <h3>Nội Dung Trọng Tâm</h3>
-                    <ul class="toc-list">
-                        <li class="toc-item active" style="pointer-events: none;">
+                    <ul class="toc-list" data-target="video-2">
+                        <li class="toc-item active" data-time="0">
                             <div class="toc-time">00:00</div>
                             <div class="toc-title">Áp Lực & Diện Tích Tiếp Xúc</div>
                         </li>
-                        <li class="toc-item" style="pointer-events: none;">
+                        <li class="toc-item" data-time="195">
                             <div class="toc-time">03:15</div>
                             <div class="toc-title">Định luật Pascal trong máy ép thủy lực</div>
                         </li>
-                        <li class="toc-item" style="pointer-events: none;">
+                        <li class="toc-item" data-time="400">
                             <div class="toc-time">06:40</div>
                             <div class="toc-title">Bí ẩn Lực đẩy Archimedes</div>
                         </li>
-                        <li class="toc-item" style="pointer-events: none;">
+                        <li class="toc-item" data-time="605">
                             <div class="toc-time">10:05</div>
                             <div class="toc-title">Áp suất không khí và ứng dụng</div>
                         </li>

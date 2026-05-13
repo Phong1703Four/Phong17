@@ -18,7 +18,7 @@ const HTML_VIDEO = `
                 <div class="video-main-column">
                     <div class="video-player-wrapper">
                         <video class="native-video" id="video-1" controls controlsList="nodownload">
-                            <source src="videos/nang-luong-Cong-co-hoc.mp4" type="video/mp4">
+                            <source src="videos/Nang-luong-Cong-co-hoc.mp4" type="video/mp4">
                             Trình duyệt của bạn không hỗ trợ thẻ video.
                         </video>
                     </div>
